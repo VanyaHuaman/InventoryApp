@@ -9,4 +9,18 @@
     <string name="delete_all_entries">Delete all Entries</string>
     <string name="insert_dummy_data">Insert Dummy Data</string>
     <string name="action_save">action save</string>
+    <string name="editor_insert_product_failure">Insert Product Failure</string>
+    <string name="editor_insert_product_successfull">Product Added</string>
+    <string name="empty_list_message">Empty List</string>
+    <string name="editor_updated_product_failed">Product Update Failed</string>
+    <string name="editor_updated_product_successful">Product Updated</string>
+    <string name="action_delete">Delete</string>
+    <string name="editor_delete_product_failed">Delete Product Failed</string>
+    <string name="editor_delete_product_successful">Deleted Product</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep Editing</string>
+    <string name="unsaved_changes_dialog_msg">All Unsaved Data will be lost</string>
+    <string name="delete_dialog_msg">Delete this Product?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -17,6 +17,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".EditorActivity" />
+        <provider
+            android:authorities="com.example.vanya.inventoryapp"
+            android:name=".data.ProductProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>
