@@ -132,7 +132,7 @@ public class ProductProvider extends ContentProvider {
 
     private int updateProduct(Uri uri, ContentValues values, String selection, String[] selectionArgs){
         String name = values.getAsString(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME);
-        int price = values.getAsInteger(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE);
+        double price = values.getAsInteger(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE);
         int quantity = values.getAsInteger(ProductContract.ProductEntry.COLUMN_PRODUCT_QUAN);
         String supplier = values.getAsString(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER);
         String phonenumber = values.getAsString(ProductContract.ProductEntry.COLUMN_PRODUCT_PHONENUMBER);

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/category_text_view"
+            android:layout_gravity="center"
+            android:text="@string/item"
+            android:textColor="@android:color/black"
+            android:textSize="30sp"
+            android:layout_marginBottom="16dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+
+        <LinearLayout
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_width="300dp"
+            android:layout_weight="2"
+            android:paddingLeft="4dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/detail_name"
+                android:text="@string/product_name"
+                android:inputType="textCapWords"
+                style="@style/EditorFieldStyle" />
+
+
+            <TextView
+                android:id="@+id/detail_price"
+                android:text="@string/price"
+                android:inputType="numberDecimal"
+                style="@style/EditorFieldStyle" />
+
+            <TextView
+                android:id="@+id/detail_quantity"
+                android:text="@string/quantity"
+                android:inputType="number"
+                style="@style/EditorFieldStyle"/>
+
+            <TextView
+                android:id="@+id/detail_supplier"
+                android:text="@string/supplier"
+                android:inputType="textCapWords"
+                style="@style/EditorFieldStyle"/>
+
+            <TextView
+                android:id="@+id/detail_phone_number"
+                android:text="@string/phone_number"
+                android:inputType="number"
+                style="@style/EditorFieldStyle"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/detail_plus_button"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/plus_sign"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/change_quantity"/>
+            <Button
+                android:id="@+id/detail_minus_button"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/minus_sign"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/detail_edit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/edit"/>
+
+            <Button
+                android:id="@+id/detail_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/order"/>
+
+            <Button
+                android:id="@+id/detail_delete_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/delete"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

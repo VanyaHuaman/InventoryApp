@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private static final int PRODUCT_LOADER = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,12 +51,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this,EditorActivity.class);
+                Intent intent = new Intent(MainActivity.this,DetailActivity.class);
                 Uri currentProduct = ContentUris.withAppendedId(ProductEntry.CONTENT_URI,id);
                 intent.setData(currentProduct);
                 startActivity(intent);
             }
         });
+
 
 
         getLoaderManager().initLoader(PRODUCT_LOADER,null,this);
@@ -100,7 +102,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         String[] projection = {
                 ProductEntry._ID, //always needed for cursor adapters
                 ProductEntry.COLUMN_PRODUCT_NAME,
-                ProductEntry.COLUMN_PRODUCT_QUAN};
+                ProductEntry.COLUMN_PRODUCT_PRICE,
+                ProductEntry.COLUMN_PRODUCT_QUAN,
+                ProductEntry.COLUMN_PRODUCT_SUPPLIER,
+                ProductEntry.COLUMN_PRODUCT_PHONENUMBER};
 
         return new CursorLoader(this,
                 ProductEntry.CONTENT_URI,

@@ -23,4 +23,10 @@
     <string name="delete_dialog_msg">Delete this Product?</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="sale">Sale</string>
+    <string name="edit">Edit</string>
+    <string name="order">Order</string>
+    <string name="plus_sign">+</string>
+    <string name="minus_sign">-</string>
+    <string name="change_quantity">Change Quantity</string>
 </resources>

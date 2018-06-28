@@ -22,5 +22,13 @@
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
     </style>
 
+    <style name="DetailFieldStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:focusedByDefault">false</item>
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+    </style>
 
 </resources>
