@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,64 +17,97 @@ import com.example.vanya.inventoryapp.data.ProductContract;
 
 public class ProductCursorAdapter extends CursorAdapter {
 
+    private Context mContext;
+
+
     public  ProductCursorAdapter(Context context, Cursor cursor){
         super(context,cursor,0);
+        mContext = context;
     }
 
+
+    public static class ProductViewHolder {
+        public final TextView mProductName;
+        public final TextView mProductPrice;
+        public final TextView mProductQuantity;
+        public final TextView mSaleButton;
+
+        public ProductViewHolder(View view) {
+            mProductName = view.findViewById(R.id.list_item_name);
+            mProductPrice = view.findViewById(R.id.list_item_price);
+            mProductQuantity = view.findViewById(R.id.list_item_quantity);
+            mSaleButton = view.findViewById(R.id.sale_button);
+        }
+    }
+    
+
     @Override
-    public View newView(final Context context,final Cursor cursor, final ViewGroup parent){
-        return LayoutInflater.from(context).inflate(R.layout.list_item,parent,false);
+    public View newView(Context context,Cursor cursor, ViewGroup parent){
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item,parent,false);
+        ProductViewHolder productViewHolder = new ProductViewHolder(view);
+        view.setTag(productViewHolder);
+        return view;
     }
 
+
     @Override
-    public void bindView(View view, final Context context, final Cursor cursor){
-        TextView productName = view.findViewById(R.id.list_item_name);
-        TextView productPrice = view.findViewById(R.id.list_item_price);
-        final TextView productQuantity = view.findViewById(R.id.list_item_quantity);
-        TextView saleButton = view.findViewById(R.id.sale_button);
+    public void bindView(View view, Context context, Cursor cursor){
+        final Cursor mCursor = cursor;
+        int id = cursor.getInt(mCursor.getColumnIndex(ProductContract.ProductEntry._ID));
+        final Uri uri = ContentUris.withAppendedId(ProductContract.ProductEntry.CONTENT_URI,id);
+        final ProductViewHolder productViewHolder = (ProductViewHolder) view.getTag();
+
+        String nameString = mCursor.getString(mCursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME));
+        double priceString = mCursor.getDouble(mCursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE));
+        final int quantityString = mCursor.getInt(mCursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_QUAN));
 
 
-        String nameString = cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME));
-        String priceString = cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE));
-        final String quantityString = cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_QUAN));
 
-        productName.setText(nameString);
-        productPrice.setText(priceString);
-        productQuantity.setText(quantityString);
+        productViewHolder.mProductName.setText(nameString);
+        productViewHolder.mProductPrice.setText(Double.toString(priceString));
+        productViewHolder.mProductQuantity.setText(Integer.toString(quantityString));
 
-        saleButton.setOnClickListener(new View.OnClickListener() {
+
+        productViewHolder.mSaleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int newValue;
 
-                if(quantityString.equals(0)){
+                if(quantityString==0){
                     return;
                 }else{
-                    newValue = Integer.parseInt(quantityString)-1;
+                    newValue = quantityString-1;
                     Log.e("BUILDING: ","newValue = "+Integer.toString(newValue));
-                    productQuantity.setText(Integer.toString(newValue));
 
-                    ContentResolver cr = context.getContentResolver();
+
+                    ContentResolver cr = mContext.getContentResolver();
                     ContentValues values = new ContentValues();
 
                     values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME,
-                            cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME)));
+                            mCursor.getString(mCursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME)));
                     values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE,
-                            cursor.getDouble(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE)));
+                            mCursor.getDouble(mCursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE)));
                     values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUAN,newValue);
                     values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER,
-                            cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER)));
+                            mCursor.getString(mCursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER)));
                     values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PHONENUMBER,
-                            cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PHONENUMBER)));
+                            mCursor.getString(mCursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PHONENUMBER)));
 
 
-                    Long id = cursor.getLong(cursor.getColumnIndex(ProductContract.ProductEntry._ID));
-                    cr.update(ContentUris.withAppendedId(ProductContract.ProductEntry.CONTENT_URI,id),values,null, null);
+                    String[] arg = new String[]{mCursor.getString(mCursor.getColumnIndex(ProductContract.ProductEntry._ID))};
+
+                    Long id = mCursor.getLong(mCursor.getColumnIndex(ProductContract.ProductEntry._ID));
+
+                    cr.update(uri
+                            ,values
+                            ,mCursor.getString(mCursor.getColumnIndex(ProductContract.ProductEntry._ID))
+                            , null);
+
+                    productViewHolder.mProductQuantity.setText(Integer.toString(newValue));
                 }
             }
         });
     }
-
 
 
 }
