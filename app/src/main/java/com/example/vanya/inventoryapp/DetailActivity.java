@@ -3,6 +3,9 @@ package com.example.vanya.inventoryapp;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -20,6 +23,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vanya.inventoryapp.data.ProductContract;
 import com.example.vanya.inventoryapp.data.ProductContract.ProductEntry;
 
 public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -32,11 +36,23 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     private Button mEditButton;
     private Button mDeleteButton;
     private Button mOrderButton;
+    private Button mPlusButton;
+    private Button mMinusButton;
     private Uri mCurrentUri;
+    private Cursor mCursor;
+    private ContentResolver mContentResolver;
+    private int mQuantity;
     private Intent receivedIntent;
     private static final int PRODUCT_LOADER = 0;
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE};
+    String[] mProjection = {
+            ProductEntry._ID,
+            ProductEntry.COLUMN_PRODUCT_NAME,
+            ProductEntry.COLUMN_PRODUCT_PRICE,
+            ProductEntry.COLUMN_PRODUCT_QUAN,
+            ProductEntry.COLUMN_PRODUCT_SUPPLIER,
+            ProductEntry.COLUMN_PRODUCT_PHONENUMBER};
 
 
     @Override
@@ -51,8 +67,14 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         mEditButton = findViewById(R.id.detail_edit_button);
         mDeleteButton = findViewById(R.id.detail_delete_button);
         mOrderButton = findViewById(R.id.detail_order);
+        mPlusButton = findViewById(R.id.detail_plus_button);
+        mMinusButton = findViewById(R.id.detail_minus_button);
         receivedIntent = getIntent();
         mCurrentUri = receivedIntent.getData();
+        mContentResolver = getContentResolver();
+        mCursor = mContentResolver.query(mCurrentUri,mProjection,null,null);
+        mCursor.moveToFirst();
+        mQuantity = mCursor.getInt(mCursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUAN));
         setTitle("Details");
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
 
@@ -85,7 +107,11 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                 }
             }
         });
+
     }
+
+
+
 
 
     @Override
@@ -107,7 +133,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+    public void onLoadFinished(Loader<Cursor> loader, final Cursor cursor) {
         if (cursor == null || cursor.getCount() < 1) {
             return;
         }
@@ -128,13 +154,80 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
             if(mCurrentUri!=null){
                 mNameDetailText.setText(name);
-                mPriceDetailText.setText(quantity);
-                mQuantityDetailText.setText(price);
+                mPriceDetailText.setText(price);
+                mQuantityDetailText.setText(quantity);
                 mSupplierDetailText.setText(supplier);
                 mPhoneNumberDetailText.setText(phoneNumber);
             }
 
         }
+
+        mPlusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int newValue=0;
+                int id = cursor.getInt(cursor.getColumnIndex(ProductContract.ProductEntry._ID));
+                mQuantity = cursor.getInt(cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUAN));
+                newValue = mQuantity + 1;
+                final Uri uri = ContentUris.withAppendedId(ProductContract.ProductEntry.CONTENT_URI,id);
+                ContentValues values = new ContentValues();
+
+                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME,
+                        cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME)));
+                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE,
+                        cursor.getDouble(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE)));
+                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUAN, newValue);
+                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER,
+                        cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER)));
+                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PHONENUMBER,
+                        cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PHONENUMBER)));
+
+                mContentResolver.update(uri
+                        , values
+                        , null
+                        , null);
+
+                mQuantityDetailText.setText(Integer.toString(newValue));
+
+            }
+        });
+
+        mMinusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int newValue=0;
+                int id = cursor.getInt(cursor.getColumnIndex(ProductContract.ProductEntry._ID));
+                mQuantity = cursor.getInt(cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUAN));
+                if(mQuantity>0) {
+
+                    newValue = mQuantity - 1;
+                    final Uri uri = ContentUris.withAppendedId(ProductContract.ProductEntry.CONTENT_URI, id);
+                    ContentValues values = new ContentValues();
+
+                    values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME,
+                            cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME)));
+                    values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE,
+                            cursor.getDouble(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE)));
+                    values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUAN, newValue);
+                    values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER,
+                            cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER)));
+                    values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PHONENUMBER,
+                            cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PHONENUMBER)));
+
+                    mContentResolver.update(uri
+                            , values
+                            , null
+                            , null);
+
+                    mQuantityDetailText.setText(Integer.toString(newValue));
+                }
+            }
+        });
+
+
+
+
     }
 
     @Override
