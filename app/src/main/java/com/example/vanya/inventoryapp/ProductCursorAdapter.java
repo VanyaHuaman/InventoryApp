@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +38,7 @@ public class ProductCursorAdapter extends CursorAdapter {
             mSaleButton = view.findViewById(R.id.sale_button);
         }
     }
-    
+
 
     @Override
     public View newView(Context context,Cursor cursor, ViewGroup parent){
@@ -61,8 +60,6 @@ public class ProductCursorAdapter extends CursorAdapter {
         double priceString = mCursor.getDouble(mCursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE));
         final int quantityString = mCursor.getInt(mCursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_QUAN));
 
-
-
         productViewHolder.mProductName.setText(nameString);
         productViewHolder.mProductPrice.setText(Double.toString(priceString));
         productViewHolder.mProductQuantity.setText(Integer.toString(quantityString));
@@ -77,9 +74,6 @@ public class ProductCursorAdapter extends CursorAdapter {
                     return;
                 }else{
                     newValue = quantityString-1;
-                    Log.e("BUILDING: ","newValue = "+Integer.toString(newValue));
-
-
                     ContentResolver cr = mContext.getContentResolver();
                     ContentValues values = new ContentValues();
 
@@ -92,11 +86,6 @@ public class ProductCursorAdapter extends CursorAdapter {
                             mCursor.getString(mCursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER)));
                     values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PHONENUMBER,
                             mCursor.getString(mCursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PHONENUMBER)));
-
-
-                    String[] arg = new String[]{mCursor.getString(mCursor.getColumnIndex(ProductContract.ProductEntry._ID))};
-
-                    Long id = mCursor.getLong(mCursor.getColumnIndex(ProductContract.ProductEntry._ID));
 
                     cr.update(uri
                             ,values

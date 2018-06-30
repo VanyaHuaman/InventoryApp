@@ -78,37 +78,43 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         Log.v("BUILDING: ", "SaveProduct started");
 
-        String name = mNameEditText.getText().toString().trim();
-        double price = Double.parseDouble(mPriceEditText.getText().toString().trim());
-        String quantity = mQuantityEditText.getText().toString().trim();
-        String supplier = mSupplierEditText.getText().toString().trim();
-        String phoneNumber = mPhoneNumberEditText.getText().toString().trim();
 
-        ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_PRODUCT_NAME, name);
-        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, price);
-        values.put(ProductEntry.COLUMN_PRODUCT_QUAN, quantity);
-        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplier);
-        values.put(ProductEntry.COLUMN_PRODUCT_PHONENUMBER, phoneNumber);
+        if (mPriceEditText.getText().toString().equals(""))  {
 
-        if(mCurrentUri==null) {
-            Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+        } else {
+            double price = Double.parseDouble(mPriceEditText.getText().toString().trim());
+            String name = mNameEditText.getText().toString().trim();
+            String quantity = mQuantityEditText.getText().toString().trim();
+            String supplier = mSupplierEditText.getText().toString().trim();
+            String phoneNumber = mPhoneNumberEditText.getText().toString().trim();
 
-            if (newUri == null) {
-                Toast.makeText(this, getString(R.string.editor_insert_product_failure), Toast.LENGTH_SHORT).show();
+
+            ContentValues values = new ContentValues();
+            values.put(ProductEntry.COLUMN_PRODUCT_NAME, name);
+            values.put(ProductEntry.COLUMN_PRODUCT_PRICE, price);
+            values.put(ProductEntry.COLUMN_PRODUCT_QUAN, quantity);
+            values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplier);
+            values.put(ProductEntry.COLUMN_PRODUCT_PHONENUMBER, phoneNumber);
+
+            if (mCurrentUri == null) {
+                Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+
+                if (newUri == null) {
+                    Toast.makeText(this, getString(R.string.editor_insert_product_failure), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, getString(R.string.editor_insert_product_successfull), Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(this, getString(R.string.editor_insert_product_successfull), Toast.LENGTH_SHORT).show();
-            }
-        }else{
-            int rowsChanged = getContentResolver().update(mCurrentUri,values,null,null);
+                int rowsChanged = getContentResolver().update(mCurrentUri, values, null, null);
 
-            if(rowsChanged == 0){
-                Toast.makeText(this,getString(R.string.editor_updated_product_failed),Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(this,getString(R.string.editor_updated_product_successful),Toast.LENGTH_SHORT).show();
+                if (rowsChanged == 0) {
+                    Toast.makeText(this, getString(R.string.editor_updated_product_failed), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, getString(R.string.editor_updated_product_successful), Toast.LENGTH_SHORT).show();
+                }
             }
+
         }
-
     }
 
     @Override

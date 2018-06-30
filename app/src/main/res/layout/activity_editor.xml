@@ -37,32 +37,32 @@
 
             <EditText
                 android:id="@+id/edit_name"
-                android:text="@string/product_name"
+                android:hint="@string/product_name"
                 android:inputType="textCapWords"
                 style="@style/EditorFieldStyle" />
 
 
             <EditText
                 android:id="@+id/edit_price"
-                android:text="@string/price"
+                android:hint="@string/price"
                 android:inputType="numberDecimal"
                 style="@style/EditorFieldStyle" />
 
             <EditText
                 android:id="@+id/edit_quantity"
-                android:text="@string/quantity"
+                android:hint="@string/quantity"
                 android:inputType="number"
                 style="@style/EditorFieldStyle"/>
 
             <EditText
                 android:id="@+id/edit_supplier"
-                android:text="@string/supplier"
+                android:hint="@string/supplier"
                 android:inputType="textCapWords"
                 style="@style/EditorFieldStyle"/>
 
             <EditText
                 android:id="@+id/edit_phone_number"
-                android:text="@string/phone_number"
+                android:hint="@string/phone_number"
                 android:inputType="number"
                 style="@style/EditorFieldStyle"/>
 
