@@ -79,42 +79,40 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         Log.v("BUILDING: ", "SaveProduct started");
 
 
-        if (mPriceEditText.getText().toString().equals(""))  {
 
-        } else {
-            double price = Double.parseDouble(mPriceEditText.getText().toString().trim());
-            String name = mNameEditText.getText().toString().trim();
-            String quantity = mQuantityEditText.getText().toString().trim();
-            String supplier = mSupplierEditText.getText().toString().trim();
-            String phoneNumber = mPhoneNumberEditText.getText().toString().trim();
+        double price = Double.parseDouble(mPriceEditText.getText().toString().trim());
+        String name = mNameEditText.getText().toString().trim();
+        String quantity = mQuantityEditText.getText().toString().trim();
+        String supplier = mSupplierEditText.getText().toString().trim();
+        String phoneNumber = mPhoneNumberEditText.getText().toString().trim();
 
 
-            ContentValues values = new ContentValues();
-            values.put(ProductEntry.COLUMN_PRODUCT_NAME, name);
-            values.put(ProductEntry.COLUMN_PRODUCT_PRICE, price);
-            values.put(ProductEntry.COLUMN_PRODUCT_QUAN, quantity);
-            values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplier);
-            values.put(ProductEntry.COLUMN_PRODUCT_PHONENUMBER, phoneNumber);
+        ContentValues values = new ContentValues();
+        values.put(ProductEntry.COLUMN_PRODUCT_NAME, name);
+        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, price);
+        values.put(ProductEntry.COLUMN_PRODUCT_QUAN, quantity);
+        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplier);
+        values.put(ProductEntry.COLUMN_PRODUCT_PHONENUMBER, phoneNumber);
 
-            if (mCurrentUri == null) {
-                Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
 
-                if (newUri == null) {
-                    Toast.makeText(this, getString(R.string.editor_insert_product_failure), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, getString(R.string.editor_insert_product_successfull), Toast.LENGTH_SHORT).show();
-                }
+        if (mCurrentUri == null) {
+            Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+
+            if (newUri == null) {
+                Toast.makeText(this, getString(R.string.editor_insert_product_failure), Toast.LENGTH_SHORT).show();
             } else {
-                int rowsChanged = getContentResolver().update(mCurrentUri, values, null, null);
-
-                if (rowsChanged == 0) {
-                    Toast.makeText(this, getString(R.string.editor_updated_product_failed), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, getString(R.string.editor_updated_product_successful), Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(this, getString(R.string.editor_insert_product_successfull), Toast.LENGTH_SHORT).show();
             }
+        } else {
+            int rowsChanged = getContentResolver().update(mCurrentUri, values, null, null);
 
+            if (rowsChanged == 0) {
+                Toast.makeText(this, getString(R.string.editor_updated_product_failed), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.editor_updated_product_successful), Toast.LENGTH_SHORT).show();
+            }
         }
+
     }
 
     @Override
@@ -138,8 +136,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                saveProduct();
-                finish();
+                if(!checkForNulls()) {
+                    saveProduct();
+                    finish();
+                }
                 return true;
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
@@ -290,5 +290,40 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 };
         showUnsavedChangesDialog(discardButtonClickListener);
     }
+
+    public boolean checkForNulls(){
+        boolean isNull = false;
+
+        if (mNameEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Please Enter the Product Name",Toast.LENGTH_LONG).show();
+            return isNull = true;
+        }
+
+        if (mPriceEditText.getText().toString().isEmpty())  {
+            Toast.makeText(this, "Please Enter the Price",Toast.LENGTH_LONG).show();
+            return isNull = true;
+        }
+
+        if (mQuantityEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Please Enter the Quantity",Toast.LENGTH_LONG).show();
+            return isNull = true;
+        }
+
+        if (mSupplierEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Please Enter the Supplier",Toast.LENGTH_LONG).show();
+            return isNull = true;
+        }
+
+        if (mPhoneNumberEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Please Enter the Phone Number",Toast.LENGTH_LONG).show();
+            return isNull = true;
+        }
+        return isNull;
+    }
+
+
+
+
+
 }
 
